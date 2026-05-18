@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formova</title>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --primary-dark: #0d47a1;
+            --primary-light: #e8f0fe;
+            --dark-bg: #121212;
+            --dark-surface: #1e1e1e;
+            --dark-text: #ffffff;
+            --dark-text-secondary: #b0b0b0;
+            --accent-color: #00bcd4;
+            --error-color: #f44336;
+            --success-color: #4caf50;
+        }
+        
+        body {
+            font-family: 'Roboto', 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--dark-surface);
+            color: var(--dark-text);
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        h1 {
+            margin: 0;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .left-content {
+            flex: 1;
+            min-width: 640px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .video-container {
+            flex: 1;
+            min-width: 640px;
+            background-color: var(--dark-surface);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .video-feed {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .workout-summary {
+            background-color: var(--dark-surface);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .timer-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            background-color: var(--dark-surface);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .timer-icon {
+            font-size: 32px;
+        }
+        
+        .timer-display {
+            text-align: center;
+        }
+        
+        .timer-label {
+            color: var(--dark-text-secondary);
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .timer-value {
+            color: var(--primary-color);
+            font-size: 36px;
+            font-weight: 500;
+            font-family: 'Roboto Mono', monospace;
+        }
+        
+        .controls {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--dark-surface);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .controls h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+        
+        .exercise-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .exercise-btn {
+            background-color: var(--dark-surface);
+            color: var(--dark-text);
+            border: 1px solid var(--primary-color);
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .exercise-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .exercise-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stop-btn {
+            background-color: var(--error-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        .stop-btn:hover {
+            background-color: #d32f2f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .status.active {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+        
+        .status.inactive {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--dark-text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .status.error {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+        
+        .instructions {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: rgba(26, 115, 232, 0.1);
+            border-radius: 6px;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+            color: var(--dark-text-secondary);
+        }
+        
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px 25px;
+            border-radius: 6px;
+            display: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .retry-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            margin-top: 15px;
+            display: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            width: 100%;
+        }
+        
+        .retry-btn:hover {
+            background-color: #00acc1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .chatbot-container {
+            background-color: var(--dark-surface);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 300px;
+        }
+        
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        
+        .bot-message {
+            background-color: rgba(26, 115, 232, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--dark-text);
+        }
+        
+        .user-message {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--dark-text);
+            margin-left: auto;
+        }
+        
+        .message ul {
+            margin: 8px 0 0 0;
+            padding-left: 20px;
+        }
+        
+        .message li {
+            margin-bottom: 4px;
+            color: var(--dark-text-secondary);
+        }
+        
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        #chat-input {
+            flex-grow: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 10px 15px;
+            color: var(--dark-text);
+            font-size: 14px;
+        }
+        
+        #chat-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        #chat-input::placeholder {
+            color: var(--dark-text-secondary);
+        }
+        
+        #send-message {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        #send-message:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .video-container, .controls {
+                min-width: 100%;
+            }
+        }
+        
+        .rep-display {
+            text-align: center;
+        }
+        .rep-label {
+            color: var(--dark-text-secondary);
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .rep-value {
+            color: var(--primary-color);
+            font-size: 36px;
+            font-weight: 500;
+            font-family: 'Roboto Mono', monospace;
+        }
+        
+        .feedback-popup {
+            position: absolute;
+            right: 30px;
+            bottom: 30px;
+            background: rgba(255, 69, 0, 0.95);
+            color: #fff;
+            padding: 18px 32px;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+            z-index: 10;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            opacity: 1;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Formova</h1>
+        </header>
+        
+        <div class="main-content">
+            <div class="left-content">
+                <div class="video-container">
+                    <img id="video-feed" class="video-feed" src="" alt="Video Feed">
+                    <div id="loading" class="loading">Loading camera...</div>
+                    <div id="feedback-popup" class="feedback-popup" style="display:none;"></div>
+                </div>
+                <div class="timer-container" style="display: flex; align-items: center; gap: 32px;">
+                    <div class="timer-icon">⏱️</div>
+                    <div class="timer-display">
+                        <div class="timer-label">Workout Time</div>
+                        <div class="timer-value" id="workout-time">0:00</div>
+                    </div>
+                    <div class="rep-display">
+                        <div class="rep-label">Reps</div>
+                        <div class="rep-value" id="rep-count">0</div>
+                    </div>
+                </div>
+                <div class="chatbot-container">
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message bot-message">
+                            Hello! I'm your workout assistant. I can help you with:
+                            <ul>
+                                <li>Exercise form tips</li>
+                                <li>Workout recommendations</li>
+                                <li>General fitness advice</li>
+                            </ul>
+                            How can I help you today?
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chat-input" placeholder="Ask me anything about your workout...">
+                        <button id="send-message">Send</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <h2>Select Exercise</h2>
+                <div class="exercise-buttons">
+                    <button class="exercise-btn" data-exercise="curls">Bicep Curls</button>
+                    <button class="exercise-btn" data-exercise="lateral_raises">Lateral Raises</button>
+                    <button class="exercise-btn" data-exercise="front_raises">Front Raises</button>
+                    <button class="exercise-btn" data-exercise="shoulder_press">Shoulder Press</button>
+                    <button class="exercise-btn" data-exercise="squats">Squats</button>
+                    <button class="exercise-btn" data-exercise="lunges">Lunges</button>
+                    <button class="exercise-btn" data-exercise="high_knees">High Knees</button>
+                </div>
+                
+                <button id="stop-btn" class="stop-btn">Stop Exercise</button>
+                
+                <div id="status" class="status inactive">
+                    No exercise active
+                </div>
+                
+                <button id="retry-btn" class="retry-btn">Retry Connection</button>
+                
+                <div class="instructions">
+                    <h3>How to Use</h3>
+                    <ul>
+                        <li>Select an exercise from the buttons above</li>
+                        <li>Position yourself in front of the camera</li>
+                        <li>Follow the on-screen instructions and count</li>
+                        <li>Press "Stop Exercise" when you're done</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoFeed = document.getElementById('video-feed');
+            const exerciseButtons = document.querySelectorAll('.exercise-btn');
+            const stopButton = document.getElementById('stop-btn');
+            const statusElement = document.getElementById('status');
+            const loadingElement = document.getElementById('loading');
+            const retryButton = document.getElementById('retry-btn');
+            
+            let currentExercise = null;
+            let isTransitioning = false;
+            let videoFeedError = false;
+            
+            // Add workout timer
+            let startTime;
+            let timerInterval;
+            
+            function updateWorkoutTime() {
+                if (!startTime) return;
+                
+                const now = new Date();
+                const diff = now - startTime;
+                const minutes = Math.floor(diff / 60000);
+                const seconds = Math.floor((diff % 60000) / 1000);
+                document.getElementById('workout-time').textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            // Function to start an exercise
+            function startExercise(exercise) {
+                if (isTransitioning) return;
+                
+                if (!startTime) {
+                    startTime = new Date();
+                    timerInterval = setInterval(updateWorkoutTime, 1000);
+                }
+                
+                // Reset rep counter display
+                document.getElementById('rep-count').textContent = '0';
+                
+                isTransitioning = true;
+                loadingElement.style.display = 'block';
+                retryButton.style.display = 'none';
+                
+                // First stop any existing exercise
+                if (currentExercise) {
+                    stopExercise()
+                        .then(() => {
+                            // After stopping, start the new exercise
+                            return fetchStartExercise(exercise);
+                        })
+                        .catch(error => {
+                            console.error('Error during transition:', error);
+                            showError('Failed to switch exercises. Please try again.');
+                            isTransitioning = false;
+                            loadingElement.style.display = 'none';
+                            retryButton.style.display = 'block';
+                        });
+                } else {
+                    // No exercise running, just start the new one
+                    fetchStartExercise(exercise)
+                        .catch(error => {
+                            console.error('Error starting exercise:', error);
+                            showError('Failed to start exercise. Please try again.');
+                            isTransitioning = false;
+                            loadingElement.style.display = 'none';
+                            retryButton.style.display = 'block';
+                        });
+                }
+            }
+            
+            // Function to fetch and start a new exercise
+            function fetchStartExercise(exercise) {
+                return fetch('/start_exercise', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ exercise: exercise }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.error || 'Failed to start exercise');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        currentExercise = exercise;
+                        videoFeedError = false;
+                        videoFeed.src = '/video_feed?' + new Date().getTime(); // Add timestamp to prevent caching
+                        statusElement.textContent = `Active: ${exercise.replace('_', ' ').toUpperCase()}`;
+                        statusElement.className = 'status active';
+                        
+                        // Update button styles
+                        exerciseButtons.forEach(btn => {
+                            if (btn.dataset.exercise === exercise) {
+                                btn.classList.add('active');
+                            } else {
+                                btn.classList.remove('active');
+                            }
+                        });
+                    } else {
+                        throw new Error('Failed to start exercise');
+                    }
+                })
+                .finally(() => {
+                    isTransitioning = false;
+                    loadingElement.style.display = 'none';
+                });
+            }
+            
+            // Function to stop the current exercise
+            function stopExercise() {
+                if (!currentExercise) return Promise.resolve();
+                
+                clearInterval(timerInterval);
+                startTime = null;
+                document.getElementById('workout-time').textContent = '0:00';
+                
+                return fetch('/stop_exercise', {
+                    method: 'POST',
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.error || 'Failed to stop exercise');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        currentExercise = null;
+                        videoFeed.src = '';
+                        statusElement.textContent = 'No exercise active';
+                        statusElement.className = 'status inactive';
+                        
+                        // Reset button styles
+                        exerciseButtons.forEach(btn => {
+                            btn.classList.remove('active');
+                        });
+                    } else {
+                        throw new Error('Failed to stop exercise');
+                    }
+                });
+            }
+            
+            // Function to show error messages
+            function showError(message) {
+                statusElement.textContent = `Error: ${message}`;
+                statusElement.className = 'status error';
+                retryButton.style.display = 'block';
+            }
+            
+            // Function to retry the current exercise
+            function retryCurrentExercise() {
+                if (currentExercise) {
+                    startExercise(currentExercise);
+                } else {
+                    showError('No exercise selected');
+                }
+            }
+            
+            // Add event listeners to exercise buttons
+            exerciseButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const exercise = this.dataset.exercise;
+                    startExercise(exercise);
+                });
+            });
+            
+            // Add event listener to stop button
+            stopButton.addEventListener('click', function() {
+                if (currentExercise && !isTransitioning) {
+                    isTransitioning = true;
+                    loadingElement.style.display = 'block';
+                    
+                    stopExercise()
+                        .catch(error => {
+                            console.error('Error stopping exercise:', error);
+                            showError('Failed to stop exercise. Please try again.');
+                        })
+                        .finally(() => {
+                            isTransitioning = false;
+                            loadingElement.style.display = 'none';
+                        });
+                }
+            });
+            
+            // Add event listener to retry button
+            retryButton.addEventListener('click', function() {
+                retryCurrentExercise();
+            });
+            
+            // Handle video errors
+            videoFeed.addEventListener('error', function() {
+                console.error('Video feed error');
+                videoFeedError = true;
+                showError('Camera feed error. Please try again.');
+                retryButton.style.display = 'block';
+            });
+            
+            // Check video feed periodically
+            setInterval(function() {
+                if (currentExercise && !videoFeedError && videoFeed.src) {
+                    // If the video feed is not loading, show an error
+                    if (videoFeed.complete && videoFeed.naturalWidth === 0) {
+                        console.error('Video feed not loading');
+                        videoFeedError = true;
+                        showError('Camera feed not loading. Please try again.');
+                        retryButton.style.display = 'block';
+                    }
+                }
+            }, 5000);
+
+            // Add chatbot functionality
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-message');
+
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+                messageDiv.textContent = message;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function handleUserMessage() {
+                const message = chatInput.value.trim();
+                if (message) {
+                    addMessage(message, true);
+                    chatInput.value = '';
+                    
+                    // Send message to backend
+                    fetch('/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: message }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.response) {
+                            // Format the response if it contains newlines
+                            const formattedResponse = data.response.split('\n').map(line => {
+                                // Check if line is a list item
+                                if (line.match(/^\d+\./)) {
+                                    return `<strong>${line}</strong>`;
+                                } else if (line.match(/^-/)) {
+                                    return `<span class="list-item">${line}</span>`;
+                                }
+                                return line;
+                            }).join('<br>');
+
+                            const messageDiv = document.createElement('div');
+                            messageDiv.className = 'message bot-message';
+                            messageDiv.innerHTML = formattedResponse;
+                            chatMessages.appendChild(messageDiv);
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        addMessage('Sorry, I encountered an error. Please try again.', false);
+                    });
+                }
+            }
+
+            sendButton.addEventListener('click', handleUserMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleUserMessage();
+                }
+            });
+
+            // Poll rep count from backend and update display
+            function updateRepCount() {
+                fetch('/get_count')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('rep-count').textContent = data.count;
+                    })
+                    .catch(err => {
+                        document.getElementById('rep-count').textContent = '0';
+                    });
+            }
+            setInterval(updateRepCount, 1000);
+
+            // Poll feedback from backend and show/hide popup
+            function updateFeedbackPopup() {
+                fetch('/get_feedback')
+                    .then(response => response.json())
+                    .then(data => {
+                        const popup = document.getElementById('feedback-popup');
+                        if (data.feedback && data.feedback.length > 0) {
+                            popup.textContent = data.feedback;
+                            popup.style.display = 'block';
+                            popup.style.opacity = '1';
+                        } else {
+                            popup.style.opacity = '0';
+                            setTimeout(() => { popup.style.display = 'none'; }, 300);
+                        }
+                    })
+                    .catch(err => {
+                        document.getElementById('feedback-popup').style.display = 'none';
+                    });
+            }
+            setInterval(updateFeedbackPopup, 700);
+        });
+    </script>
+</body>
+</html> 
