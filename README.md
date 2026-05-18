@@ -1,6 +1,6 @@
-# Formova 🏋️‍♂️🤖
+# Formova
 
-Welcome to **Formova**! I built this project during high school to combine two of my biggest passions: fitness and computer science. 
+I built this project during high school. 
 
 Formova is a real-time, AI-powered workout form analyzer and virtual personal trainer. Using computer vision, it tracks your body movements through a webcam, calculates your joint angles on the fly, counts your repetitions, warns you if your form is slipping, and even lets you chat with an AI personal trainer powered by Google's Gemini API!
 
@@ -8,7 +8,7 @@ I designed this project to explore how advanced computer vision and generative A
 
 ---
 
-## 🌟 What It Does (Features)
+## What It Does (Features)
 
 *   **Real-Time Pose Tracking:** Uses Google's MediaPipe framework to detect 33 key landmarks on your body in real-time.
 *   **Rep Counter & Form Analyzer:** Tracks 7 different exercises across upper body, legs, and cardio:
@@ -20,7 +20,7 @@ I designed this project to explore how advanced computer vision and generative A
 *   **Web Dashboard:** A clean, single-page web interface built using Flask, HTML, and CSS.
 
 
-## 🚀 How to Set Up & Run Formova
+## How to Set Up & Run Formova
 
 ### Prerequisites
 *   Python 3.8 to 3.11 installed.
